@@ -615,13 +615,13 @@
         });
     </script>
       <script>
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
         e.preventDefault(); 
 
         const usuario = document.getElementById('usuario').value;
         const password = document.getElementById('password').value;
 
-        // AQUÍ ESTABA EL ERROR: Debes agregar /login al final de tu enlace ngrok
+        // IMPORTANTE: Asegúrate de que esta URL sea la de ngrok y termine en /login
         const urlNgrok = 'https://liking-espionage-bagginess.ngrok-free.dev/login';
 
         fetch(urlNgrok, {
@@ -632,22 +632,33 @@
             },
             body: JSON.stringify({ usuario: usuario, password: password })
         })
-        .then(response => response.json())
-        .then(data => {
-            const msjDiv = document.getElementById('mensaje');
-            if (data.success) {
-                msjDiv.innerHTML = `<p class="mt-4 text-center text-green-400 font-bold text-sm bg-green-950/50 py-2 rounded-lg border border-green-500/30">Bienvenido al sistema</p>`;
-                // Opcional: guardar sesión en el navegador
-                // localStorage.setItem('usuarioLogueado', usuario);
-            } else {
-                msjDiv.innerHTML = `<p class="mt-4 text-center text-red-400 font-bold text-sm bg-red-950/50 py-2 rounded-lg border border-red-500/30">${data.message}</p>`;
+        .then(response => response.text()) // Leemos el texto crudo primero (HTML o JSON)
+        .then(text => {
+            try {
+                // Intentamos convertirlo a JSON
+                const data = JSON.parse(text); 
+                const msjDiv = document.getElementById('mensaje');
+                
+                if (data.success) {
+                    msjDiv.innerHTML = `<p class="mt-4 text-center text-green-400 font-bold text-sm bg-green-950/50 py-2 rounded-lg border border-green-500/30">Bienvenido al sistema</p>`;
+                } else {
+                    msjDiv.innerHTML = `<p class="mt-4 text-center text-red-400 font-bold text-sm bg-red-950/50 py-2 rounded-lg border border-red-500/30">${data.message}</p>`;
+                }
+            } catch (error) {
+                // SI FALLA (como te está pasando), MOSTRAMOS EL ERROR REAL EN PANTALLA
+                console.error("Respuesta del servidor:", text);
+                document.getElementById('mensaje').innerHTML = `
+                    <div class="mt-4 text-left text-orange-400 text-xs bg-orange-950/50 p-3 rounded-lg border border-orange-500/30">
+                        <b>Error oculto revelado. El servidor respondió con:</b><br><br>
+                        <pre style="white-space: pre-wrap; word-wrap: break-word;">${text.substring(0, 150)}...</pre>
+                    </div>`;
             }
         })
         .catch(error => {
-            console.error('Error:', error);
+            console.error('Error de red:', error);
             document.getElementById('mensaje').innerHTML = `<p class="mt-4 text-center text-red-400 font-bold text-sm bg-red-950/50 py-2 rounded-lg border border-red-500/30">Error de conexión con el servidor</p>`;
         });
     });
-    </script>
+</script>
 </body>
 </html>
