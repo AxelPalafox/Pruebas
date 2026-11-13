@@ -96,42 +96,34 @@
 
     <!-- NAV BAR -->
     <nav class="sticky top-0 z-40 bg-black/80 backdrop-blur-md border-b border-purple-900/40 px-4 lg:px-8 py-3">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <!-- Logo Brand -->
-            <a href="#" class="flex items-center gap-3 group">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 to-cyan-400 p-0.5 group-hover:scale-105 transition-transform duration-300">
-                    <div class="w-full h-full bg-brand-dark rounded-[10px] flex items-center justify-center">
-                        <i class="fa-solid font-bold text-cyan-400 text-lg fa-gamepad"></i>
-                    </div>
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <!-- Logo Brand -->
+        <a href="#" class="flex items-center gap-3 group">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 to-cyan-400 p-0.5 group-hover:scale-105 transition-transform duration-300">
+                <div class="w-full h-full bg-brand-dark rounded-[10px] flex items-center justify-center">
+                    <i class="fa-solid font-bold text-cyan-400 text-lg fa-gamepad"></i>
                 </div>
-                <span class="font-orbitron font-black text-2xl tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-500">
-                    NEXUS <span class="text-xs px-2 py-0.5 rounded bg-cyan-950 text-cyan-400 border border-cyan-500/30">GAMING</span>
-                </span>
-            </a>
-
-            <!-- Nav Links -->
-            <div class="hidden md:flex items-center gap-8 font-orbitron text-sm font-semibold tracking-wide">
-                <a href="#mision-vision" class="hover:text-cyan-400 transition-colors">MISIÓN</a>
-                <a href="#juegos" class="hover:text-cyan-400 transition-colors">BIBLIOTECA</a>
-                <a href="#menu" class="hover:text-cyan-400 transition-colors">MENÚ GASTRONÓMICO</a>
-                <a href="#login-section" class="hover:text-cyan-400 transition-colors">INICIAR SESIÓN</a>
-                <a href="#contacto" class="hover:text-cyan-400 transition-colors">CONTACTO</a>
             </div>
+            <span class="font-orbitron font-black text-2xl tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-500">
+                NEXUS <span class="text-xs px-2 py-0.5 rounded bg-cyan-950 text-cyan-400 border border-cyan-500/30">GAMING</span>
+            </span>
+        </a>
 
-            <!-- CTA / Estado Sesión -->
-            <?php if (isset($_SESSION['usuario'])): ?>
-                <div class="flex items-center gap-3 font-orbitron">
-                    <span class="text-xs text-cyan-400 font-bold"><i class="fa-solid fa-user mr-1"></i> <?php echo htmlspecialchars($_SESSION['usuario']); ?></span>
-                    <a href="bienvenida.php" class="px-4 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs uppercase">Panel</a>
-                    <a href="logout.php" class="px-3 py-1.5 rounded-xl bg-red-950/80 hover:bg-red-900 border border-red-500/30 text-red-400 font-bold text-xs uppercase">Salir</a>
-                </div>
-            <?php else: ?>
-                <a href="#login-section" class="px-5 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-black font-orbitron font-bold text-xs uppercase tracking-widest shadow-lg shadow-cyan-500/20 transition-all hover:scale-105 active:scale-95">
-                    Entrar / Registro
-                </a>
-            <?php endif; ?>
+        <!-- Nav Links -->
+        <div class="hidden md:flex items-center gap-8 font-orbitron text-sm font-semibold tracking-wide">
+            <a href="#mision-vision" class="hover:text-cyan-400 transition-colors">MISIÓN</a>
+            <a href="#juegos" class="hover:text-cyan-400 transition-colors">BIBLIOTECA</a>
+            <a href="#menu" class="hover:text-cyan-400 transition-colors">MENÚ GASTRONÓMICO</a>
+            <a href="#login-section" class="hover:text-cyan-400 transition-colors">INICIAR SESIÓN</a>
+            <a href="#contacto" class="hover:text-cyan-400 transition-colors">CONTACTO</a>
         </div>
-    </nav>
+
+        <!-- Botón de Entrar (Sin PHP) -->
+        <a href="#login-section" id="nav-login-btn" class="px-5 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-black font-orbitron font-bold text-xs uppercase tracking-widest shadow-lg shadow-cyan-500/20 transition-all hover:scale-105 active:scale-95">
+            Entrar / Registro
+        </a>
+    </div>
+</nav>
 
     <!-- HERO SECTION -->
     <header class="relative pt-12 pb-12 px-4 overflow-hidden flex flex-col items-center justify-center text-center">
@@ -624,37 +616,38 @@
     </script>
       <script>
         document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault(); 
+        e.preventDefault(); 
 
-            const usuario = document.getElementById('usuario').value;
-            const password = document.getElementById('password').value;
+        const usuario = document.getElementById('usuario').value;
+        const password = document.getElementById('password').value;
 
-            // IMPORTANTE: Actualiza este enlace con el que te genere ngrok cada vez que lo inicies
-            const urlNgrok = 'https://liking-espionage-bagginess.ngrok-free.dev';
+        // AQUÍ ESTABA EL ERROR: Debes agregar /login al final de tu enlace ngrok
+        const urlNgrok = 'https://liking-espionage-bagginess.ngrok-free.dev/login';
 
-            fetch(urlNgrok, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'ngrok-skip-browser-warning': 'true'
-                },
-                body: JSON.stringify({ usuario: usuario, password: password })
-            })
-            .then(response => response.json())
-            .then(data => {
-                const msjDiv = document.getElementById('mensaje');
-                if (data.success) {
-                    msjDiv.innerHTML = "<p style='color:green;'>Bienvenido al sistema</p>";
-                    // window.location.href = "inicio.html"; // Descomenta esta línea para redirigir a otra página tras iniciar sesión
-                } else {
-                    msjDiv.innerHTML = `<p style='color:red;'>${data.message}</p>`;
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                document.getElementById('mensaje').innerHTML = "<p style='color:red;'>Error de conexión con el servidor</p>";
-            });
+        fetch(urlNgrok, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'ngrok-skip-browser-warning': 'true'
+            },
+            body: JSON.stringify({ usuario: usuario, password: password })
+        })
+        .then(response => response.json())
+        .then(data => {
+            const msjDiv = document.getElementById('mensaje');
+            if (data.success) {
+                msjDiv.innerHTML = `<p class="mt-4 text-center text-green-400 font-bold text-sm bg-green-950/50 py-2 rounded-lg border border-green-500/30">Bienvenido al sistema</p>`;
+                // Opcional: guardar sesión en el navegador
+                // localStorage.setItem('usuarioLogueado', usuario);
+            } else {
+                msjDiv.innerHTML = `<p class="mt-4 text-center text-red-400 font-bold text-sm bg-red-950/50 py-2 rounded-lg border border-red-500/30">${data.message}</p>`;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('mensaje').innerHTML = `<p class="mt-4 text-center text-red-400 font-bold text-sm bg-red-950/50 py-2 rounded-lg border border-red-500/30">Error de conexión con el servidor</p>`;
         });
+    });
     </script>
 </body>
 </html>
