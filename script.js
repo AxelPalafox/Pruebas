@@ -1,6 +1,3 @@
-// URL base de tu túnel (actualízala si reinicias localhost.run)
-const API_URL = 'https://api-liga.ayadl.com.mx';
-
 function abrirCredencialVirtual() {
   Swal.fire({
     title: 'Buscador de Jugadores',
