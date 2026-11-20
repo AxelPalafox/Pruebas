@@ -1,5 +1,5 @@
 // URL base de tu túnel (actualízala si reinicias localhost.run)
-const API_URL = 'https://ab6fabb559e5c1.app.lhr.life';
+const API_URL = 'https://api-liga.ayadl.com.mx';
 
 function abrirCredencialVirtual() {
   Swal.fire({

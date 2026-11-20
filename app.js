@@ -1,7 +1,7 @@
 // ==========================================
 // CONFIGURACIÓN DEL BACKEND NODE.JS
 // ==========================================
-const API_URL = 'https://5df53aade86f1a.app.lhr.life';
+const API_URL = 'https://api-liga.ayadl.com.mx';
 
 // Función universal para comunicarse con Node.js
 async function apiCall(endpoint, method = 'GET', bodyData = null) {
