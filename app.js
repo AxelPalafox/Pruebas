@@ -1,9 +1,5 @@
-// ==========================================
-// CONFIGURACIÓN DEL BACKEND NODE.JS
-// ==========================================
 const API_URL = 'https://api-liga.ayadl.com.mx';
 
-// Función universal para comunicarse con Node.js
 async function apiCall(endpoint, method = 'GET', bodyData = null) {
     const options = {
         method: method,
@@ -25,9 +21,6 @@ async function apiCall(endpoint, method = 'GET', bodyData = null) {
     }
 }
 
-// ==========================================
-// VARIABLES GLOBALES
-// ==========================================
 let logosEquipos = {}; let todosLosPartidos = []; let todasLasPosiciones = []; let equiposAdminClasificados = { "Categoria A": [], "Categoria B": [] }; 
 let datosScorebook = { visitante: [], local: [] }; let rostersScorebook = { visitante: [], local: [] }; 
 let rosterCompletoGlobal = { visitante: [], local: [] }; 
@@ -40,9 +33,6 @@ const coloresLogos = ['#e53935', '#1e88e5', '#43a047', '#fb8c00', '#8e24aa', '#3
 
 function getColor(str) { let sum=0; for(let i=0;i<str.length;i++) sum+=str.charCodeAt(i); return coloresLogos[sum % coloresLogos.length]; }
 
-// ==========================================
-// INICIALIZACIÓN
-// ==========================================
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('login-pass').addEventListener('keypress', function(e) { if(e.key === 'Enter') intentarLogin(); });
     document.getElementById('login-user').addEventListener('keypress', function(e) { if(e.key === 'Enter') intentarLogin(); });
@@ -101,9 +91,6 @@ function parseGameDate(fStr, hStr) {
     } catch(e) { return null; }
 }
 
-// ==========================================
-// ESTADÍSTICAS Y POSICIONES
-// ==========================================
 function cargarEstadisticas() {
     document.getElementById('contenedor-stats').style.display = 'none'; document.getElementById('msj-stats').style.display = 'block';
     
@@ -163,13 +150,20 @@ function filtrarPorJornada() {
     var sel = document.getElementById('select-jornada'); 
     var contA = document.getElementById('contenedor-cat-a'); contA.innerHTML = ''; 
     var contB = document.getElementById('contenedor-cat-b'); contB.innerHTML = '';  
+    var secInter = document.getElementById('seccion-intercategoria');
+    var contInter = document.getElementById('contenedor-cat-inter');
+    if (contInter) contInter.innerHTML = '';
+
     var filt = (sel.value === "TODAS") ? todosLosPartidos : todosLosPartidos.filter(p => (p[6]?p[6].trim():"") === sel.value);
-    let cuentaA = 0; let cuentaB = 0;
+    let cuentaA = 0; let cuentaB = 0; let cuentaInter = 0;
+
     if(filt.length === 0) { 
         contA.innerHTML = '<p style="text-align:center; color:#888;">No hay partidos.</p>';
         contB.innerHTML = '<p style="text-align:center; color:#888;">No hay partidos.</p>';
+        if (secInter) secInter.style.display = 'none';
         return; 
     }
+
     filt.forEach(function(p) {
       let fMostrar = p[0] || "Por definir"; if (fMostrar.match(/^\d{4}-\d{2}-\d{2}$/)) { let pts = fMostrar.split('-'); fMostrar = `${pts[2]}/${pts[1]}/${pts[0]}`; }
       let cLoc = (p[7] !== "" && p[7] !== undefined) ? p[7] : "-"; let cVis = (p[8] !== "" && p[8] !== undefined) ? p[8] : "-"; 
@@ -186,17 +180,25 @@ function filtrarPorJornada() {
       let eqL = p[3] || "Local"; let eqV = p[4] || "Visita"; let iniL = eqL.substring(0,1).toUpperCase(); let iniV = eqV.substring(0,1).toUpperCase();
       let imgL = logosEquipos[eqL] ? `<img src="${logosEquipos[eqL]}" class="equipo-logo">` : `<div class="equipo-inicial" style="background-color:${getColor(eqL)}">${iniL}</div>`;
       let imgV = logosEquipos[eqV] ? `<img src="${logosEquipos[eqV]}" class="equipo-logo">` : `<div class="equipo-inicial" style="background-color:${getColor(eqV)}">${iniV}</div>`;
-      let tarjeta = `<div class="tarjeta-partido"><div class="header-partido"><span>${fMostrar} ${p[1]} ${badgeVivo}</span><span>${p[2]} ${p[6]}</span></div><div class="equipos-container"><div class="equipo">${imgL}<div class="equipo-nombre">${eqL}</div></div><div class="vs-container"><div class="marcador-container"><span class="marcador">${cLoc}</span> - <span class="marcador">${cVis}</span></div></div><div class="equipo">${imgV}<div class="equipo-nombre">${eqV}</div></div></div>${p[5] ? `<div style="text-align:center; font-size:12px; color:#888; margin-top:10px;">📍 ${p[5]}</div>` : ""}</div>`;
-      if (p[2] && p[2].toString().toUpperCase().includes("CATEGORIA A")) { contA.innerHTML += tarjeta; cuentaA++; }
-      else { contB.innerHTML += tarjeta; cuentaB++; }
+      let catUpper = p[2] ? p[2].toString().toUpperCase() : "";
+      let etiquetaCat = catUpper.includes("INTERCATEGORIA") ? "Intercategoría (A vs B)" : (p[2] || "");
+
+      let tarjeta = `<div class="tarjeta-partido"><div class="header-partido"><span>${fMostrar} ${p[1]} ${badgeVivo}</span><span>${etiquetaCat} ${p[6]}</span></div><div class="equipos-container"><div class="equipo">${imgL}<div class="equipo-nombre">${eqL}</div></div><div class="vs-container"><div class="marcador-container"><span class="marcador">${cLoc}</span> - <span class="marcador">${cVis}</span></div></div><div class="equipo">${imgV}<div class="equipo-nombre">${eqV}</div></div></div>${p[5] ? `<div style="text-align:center; font-size:12px; color:#888; margin-top:10px;">📍 ${p[5]}</div>` : ""}</div>`;
+      
+      if (catUpper.includes("INTERCATEGORIA") && contInter) { 
+          contInter.innerHTML += tarjeta; cuentaInter++; 
+      } else if (catUpper.includes("CATEGORIA A")) { 
+          contA.innerHTML += tarjeta; cuentaA++; 
+      } else { 
+          contB.innerHTML += tarjeta; cuentaB++; 
+      }
     });
+
     if(cuentaA === 0) contA.innerHTML = '<p style="text-align:center; color:#888;">Sin juegos programados</p>';
     if(cuentaB === 0) contB.innerHTML = '<p style="text-align:center; color:#888;">Sin juegos programados</p>';
+    if(secInter) secInter.style.display = cuentaInter > 0 ? 'block' : 'none';
 }
 
-// ==========================================
-// AUTENTICACIÓN
-// ==========================================
 function intentarLogin() {
     var u = document.getElementById('login-user').value.trim(); 
     var p = document.getElementById('login-pass').value.trim(); 
@@ -230,12 +232,10 @@ function cerrarSesion() {
     document.getElementById('login-seccion').style.display='block'; 
 }
 
-// ==========================================
-// PANEL DE ADMINISTRACIÓN Y EQUIPO
-// ==========================================
 function prepararPanelEquipo(nombre) {
     lineupSeleccionado = []; ordenJugadoresClic = []; actualizarPizarraLineup(); 
     if (esAdminGlobal) { 
+        document.getElementById('barra-herramientas-admin').style.display = 'flex';
         document.getElementById('panel-admin-partidos').style.display = 'block'; 
         document.getElementById('contenedor-admin-equipo').style.display = 'block'; 
         document.getElementById('panel-admin-rosters').style.display = 'block'; 
@@ -269,6 +269,7 @@ function prepararPanelEquipo(nombre) {
 
         document.getElementById('contenedor-jugadores-lineup').innerHTML = '<p style="color:#888; grid-column:span 2; text-align:center;">Elige equipo arriba.</p>';
     } else {
+        document.getElementById('barra-herramientas-admin').style.display = 'none';
         document.getElementById('panel-admin-partidos').style.display = 'none'; 
         document.getElementById('contenedor-admin-equipo').style.display = 'none'; 
         document.getElementById('panel-admin-rosters').style.display = 'none'; 
@@ -322,13 +323,41 @@ function forzarRecalculo() {
 }
 
 function filtrarEquiposPorCategoria() {
-    let cat = document.getElementById('form-cat').value; let selLoc = document.getElementById('form-loc'); let selVis = document.getElementById('form-vis');
-    let valLoc = selLoc.value; let valVis = selVis.value;
-    selLoc.innerHTML = '<option value="">Equipo Local...</option>'; selVis.innerHTML = '<option value="">Equipo Visita...</option>';
-    let eqs = [];
-    if (cat === "Categoria A") eqs = equiposAdminClasificados["Categoria A"] || []; else if (cat === "Categoria B") eqs = equiposAdminClasificados["Categoria B"] || []; else eqs = [...new Set([...(equiposAdminClasificados["Categoria A"] || []), ...(equiposAdminClasificados["Categoria B"] || [])])].sort();
-    eqs.forEach(e => { selLoc.innerHTML += `<option value="${e}">${e}</option>`; selVis.innerHTML += `<option value="${e}">${e}</option>`; });
-    if(valLoc) selLoc.value = valLoc; if(valVis) selVis.value = valVis;
+    let cat = document.getElementById('form-cat').value;
+    let selLoc = document.getElementById('form-loc');
+    let selVis = document.getElementById('form-vis');
+    let valLoc = selLoc.value;
+    let valVis = selVis.value;
+
+    selLoc.innerHTML = '<option value="">Equipo Local...</option>';
+    selVis.innerHTML = '<option value="">Equipo Visita...</option>';
+
+    if (cat === "Intercategoria" || cat === "") {
+        let eqA = (equiposAdminClasificados["Categoria A"] || []).slice().sort();
+        let eqB = (equiposAdminClasificados["Categoria B"] || []).slice().sort();
+        let htmlOpts = '';
+        if (eqA.length > 0) {
+            htmlOpts += '<optgroup label="🏆 Categoría A">';
+            eqA.forEach(e => htmlOpts += `<option value="${e}">${e}</option>`);
+            htmlOpts += '</optgroup>';
+        }
+        if (eqB.length > 0) {
+            htmlOpts += '<optgroup label="🏆 Categoría B">';
+            eqB.forEach(e => htmlOpts += `<option value="${e}">${e}</option>`);
+            htmlOpts += '</optgroup>';
+        }
+        selLoc.innerHTML += htmlOpts;
+        selVis.innerHTML += htmlOpts;
+    } else {
+        let eqs = (equiposAdminClasificados[cat] || []).slice().sort();
+        eqs.forEach(e => {
+            selLoc.innerHTML += `<option value="${e}">${e}</option>`;
+            selVis.innerHTML += `<option value="${e}">${e}</option>`;
+        });
+    }
+
+    if (valLoc) selLoc.value = valLoc;
+    if (valVis) selVis.value = valVis;
 }
 
 function cargarDatosPartidoEdicion() {
@@ -443,9 +472,6 @@ function cargarJugadoresAdmin() {
     cargarCheckboxesRoster(equipoElegido);
 }
 
-// ==========================================
-// FOTOS Y CREDENCIAL VIRTUAL
-// ==========================================
 function procesarFoto(nombreJugador) {
     const input = document.getElementById('inputFoto');
     const file = input.files[0];
@@ -461,7 +487,6 @@ function procesarFoto(nombreJugador) {
     reader.onload = function(event) {
         const img = new Image();
         img.onload = function() {
-            // COMPRESIÓN DE LA IMAGEN
             const canvas = document.createElement('canvas');
             const MAX_WIDTH = 150; 
             const MAX_HEIGHT = 150;
@@ -547,9 +572,6 @@ function renderizarModalCredencial(datos) {
     });
 }
 
-// ==========================================
-// LINEUPS
-// ==========================================
 function cargarCheckboxesRoster(eq) {
     apiCall('obtenerRosterParaLineup', 'POST', { equipo: eq }).then(j => {
         var html = ''; 
@@ -673,9 +695,6 @@ function enviarLineup() {
     }).catch(err => { Swal.fire('Error', 'Falla al guardar', 'error'); btn.innerText = "Reintentar"; btn.disabled = false; });
 }
 
-// ==========================================
-// SCOREBOOK Y ANOTADOR
-// ==========================================
 function llenarSelectorAnotador() {
     var selJ = document.getElementById('select-jornada-anotador'); var selP = document.getElementById('select-partido-anotador');
     if(!todosLosPartidos || todosLosPartidos.length === 0) { selJ.innerHTML = '<option value="">No hay jornadas</option>'; selP.innerHTML = '<option value="">No hay partidos</option>'; return; }
@@ -874,9 +893,6 @@ function sincronizarConExcel(lado) {
     });
 }
 
-// ==========================================
-// PLANTILLAS
-// ==========================================
 function prepararSelectorPlantillas() {
     const select = document.getElementById('select-equipo-plantilla');
     if (!select) return;
@@ -910,4 +926,166 @@ function mostrarJugadoresPlantilla() {
         html += "</tbody></table>";
         contenedor.innerHTML = html;
     }).catch(err => { contenedor.innerHTML = "<p>Error de carga</p>"; });
+}
+// ==========================================
+// VENTANA DE USUARIOS (ADMIN)
+// ==========================================
+function abrirModalUsuarios() {
+    document.getElementById('modal-usuarios').style.display = 'flex';
+    limpiarFormUsuario();
+    llenarSelectorEquiposModal('usr-equipo', '<option value="">Ninguno / Admin</option>');
+    cargarListaUsuarios();
+}
+
+function cerrarModalUsuarios() {
+    document.getElementById('modal-usuarios').style.display = 'none';
+}
+
+function limpiarFormUsuario() {
+    document.getElementById('usr-original').value = '';
+    document.getElementById('usr-nombre').value = '';
+    document.getElementById('usr-pass').value = '';
+    document.getElementById('usr-rol').value = 'EQUIPO';
+    document.getElementById('usr-equipo').value = '';
+    document.getElementById('btn-guardar-usr').innerText = '💾 Crear Usuario';
+}
+
+function cargarListaUsuarios() {
+    let cont = document.getElementById('lista-usuarios-admin');
+    cont.innerHTML = '<p style="text-align:center; color:#888;">Cargando...</p>';
+    apiCall('admin/usuarios').then(lista => {
+        if (!lista || lista.length === 0) {
+            cont.innerHTML = '<p style="text-align:center; color:#888;">No hay usuarios.</p>';
+            return;
+        }
+        cont.innerHTML = '';
+        lista.forEach(u => {
+            let uStr = JSON.stringify(u).replace(/"/g, '&quot;');
+            cont.innerHTML += `
+              <div style="display:flex; justify-content:space-between; align-items:center; padding:8px; border-bottom:1px solid #eee; font-size:13px;">
+                <div>
+                  <b>${u.Usuario}</b> <span style="font-size:10px; background:#e8eaf6; color:#3949ab; padding:2px 5px; border-radius:4px;">${u.Rol}</span><br>
+                  <span style="font-size:11px; color:#666;">Eq: ${u.Equipo || '-'} | Pass: ${u.Password}</span>
+                </div>
+                <div style="display:flex; gap:5px;">
+                  <button onclick="editarUsuarioForm(${uStr})" style="background:#fb8c00; color:white; border:none; border-radius:4px; padding:5px 8px; cursor:pointer;">✏️</button>
+                  <button onclick="eliminarUsuarioAdmin('${u.Usuario}')" style="background:#e53935; color:white; border:none; border-radius:4px; padding:5px 8px; cursor:pointer;">🗑️</button>
+                </div>
+              </div>`;
+        });
+    }).catch(() => cont.innerHTML = '<p style="text-align:center; color:red;">Error al cargar.</p>');
+}
+
+function editarUsuarioForm(u) {
+    document.getElementById('usr-original').value = u.Usuario;
+    document.getElementById('usr-nombre').value = u.Usuario;
+    document.getElementById('usr-pass').value = u.Password;
+    document.getElementById('usr-rol').value = u.Rol || 'EQUIPO';
+    document.getElementById('usr-equipo').value = u.Equipo || '';
+    document.getElementById('btn-guardar-usr').innerText = '🔄 Actualizar Usuario';
+}
+
+function guardarUsuarioAdmin() {
+    let usuarioOriginal = document.getElementById('usr-original').value;
+    let usuario = document.getElementById('usr-nombre').value.trim();
+    let password = document.getElementById('usr-pass').value.trim();
+    let rol = document.getElementById('usr-rol').value;
+    let equipo = document.getElementById('usr-equipo').value;
+
+    if (!usuario || !password) { Swal.fire('Faltan datos', 'Escribe usuario y contraseña.', 'warning'); return; }
+
+    apiCall('admin/guardarUsuario', 'POST', { usuarioOriginal, usuario, password, rol, equipo }).then(res => {
+        if (res === 'OK') {
+            Swal.fire({ icon: 'success', title: 'Guardado', timer: 1200, showConfirmButton: false });
+            limpiarFormUsuario();
+            cargarListaUsuarios();
+        } else if (res === 'YA_EXISTE') {
+            Swal.fire('Duplicado', 'Ese nombre de usuario ya existe.', 'error');
+        } else {
+            Swal.fire('Error', 'No se pudo guardar el usuario.', 'error');
+        }
+    }).catch(() => Swal.fire('Error', 'Error de conexión.', 'error'));
+}
+
+function eliminarUsuarioAdmin(usuario) {
+    if (!confirm(`¿Eliminar al usuario ${usuario}?`)) return;
+    apiCall('admin/eliminarUsuario', 'POST', { usuario }).then(res => {
+        if (res === 'OK') cargarListaUsuarios();
+        else Swal.fire('Error', 'No se pudo eliminar.', 'error');
+    });
+}
+
+// ==========================================
+// VENTANA DE LOGOS DE EQUIPOS
+// ==========================================
+function llenarSelectorEquiposModal(selectId, defaultOption) {
+    let sel = document.getElementById(selectId);
+    let eqs = [...new Set([...(equiposAdminClasificados["Categoria A"] || []), ...(equiposAdminClasificados["Categoria B"] || [])])].sort();
+    sel.innerHTML = defaultOption;
+    eqs.forEach(e => sel.innerHTML += `<option value="${e}">${e}</option>`);
+}
+
+function abrirModalLogos() {
+    document.getElementById('modal-logos').style.display = 'flex';
+    document.getElementById('input-logo-file').value = '';
+    document.getElementById('preview-logo-box').innerHTML = '<span style="font-size:12px; color:#999;">Sin logo</span>';
+    llenarSelectorEquiposModal('logo-select-equipo', '<option value="">Selecciona un equipo...</option>');
+}
+
+function cerrarModalLogos() {
+    document.getElementById('modal-logos').style.display = 'none';
+}
+
+function previsualizarLogoEquipo() {
+    let eq = document.getElementById('logo-select-equipo').value;
+    let box = document.getElementById('preview-logo-box');
+    if (eq && logosEquipos[eq]) {
+        box.innerHTML = `<img src="${logosEquipos[eq]}" style="width:100%; height:100%; object-fit:cover;">`;
+    } else {
+        box.innerHTML = '<span style="font-size:12px; color:#999;">Sin logo</span>';
+    }
+}
+
+function procesarYGuardarLogo() {
+    let equipo = document.getElementById('logo-select-equipo').value;
+    let file = document.getElementById('input-logo-file').files[0];
+
+    if (!equipo) { Swal.fire('Atención', 'Selecciona un equipo primero.', 'warning'); return; }
+    if (!file) { Swal.fire('Atención', 'Selecciona una imagen para subir.', 'warning'); return; }
+
+    let btn = document.getElementById('btn-guardar-logo');
+    btn.innerText = 'Subiendo...'; btn.disabled = true;
+
+    const reader = new FileReader();
+    reader.onload = function(event) {
+        const img = new Image();
+        img.onload = function() {
+            const canvas = document.createElement('canvas');
+            const MAX = 180;
+            let w = img.width, h = img.height;
+            if (w > h) { if (w > MAX) { h *= MAX / w; w = MAX; } }
+            else { if (h > MAX) { w *= MAX / h; h = MAX; } }
+            canvas.width = w; canvas.height = h;
+            canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+            const dataUrl = canvas.toDataURL('image/png', 0.85);
+
+            apiCall('admin/guardarLogo', 'POST', { equipo, logo: dataUrl }).then(res => {
+                btn.innerText = '💾 Guardar Logo'; btn.disabled = false;
+                if (res === 'OK') {
+                    logosEquipos[equipo] = dataUrl;
+                    previsualizarLogoEquipo();
+                    if (todosLosPartidos.length > 0) filtrarPorJornada();
+                    if (todasLasPosiciones.length > 0) mostrarPosiciones(todasLasPosiciones);
+                    Swal.fire({ icon: 'success', title: 'Logo actualizado', timer: 1400, showConfirmButton: false });
+                } else {
+                    Swal.fire('Error', 'No se pudo guardar el logo.', 'error');
+                }
+            }).catch(() => {
+                btn.innerText = '💾 Guardar Logo'; btn.disabled = false;
+                Swal.fire('Error', 'Error de conexión.', 'error');
+            });
+        };
+        img.src = event.target.result;
+    };
+    reader.readAsDataURL(file);
 }

@@ -17,7 +17,6 @@ function abrirCredencialVirtual() {
         didOpen: () => { Swal.showLoading() }
       });
       
-      // REEMPLAZO DE google.script.run
       fetch(`${API_URL}/api/jugador/historial/${encodeURIComponent(nombreBusqueda)}`)
         .then(response => {
             if (!response.ok) throw new Error('Jugador no encontrado');
@@ -41,7 +40,6 @@ function verCredencial(nombreJugador) {
     didOpen: () => { Swal.showLoading() }
   });
   
-  // REEMPLAZO DE google.script.run
   fetch(`${API_URL}/api/jugador/historial/${encodeURIComponent(nombreJugador)}`)
     .then(response => {
         if (!response.ok) throw new Error('Falla en el servidor o jugador no encontrado');
@@ -55,7 +53,6 @@ function verCredencial(nombreJugador) {
     });
 }
 
-// Función auxiliar para no repetir código visual (usada en abrirCredencial y verCredencial)
 function renderizarModalCredencial(datos) {
     let tablaHTML = `<div style="max-height: 200px; overflow-y: auto; margin-top: 15px;">
                       <table style="width: 100%; font-size: 13px; text-align: left; border-collapse: collapse;">
@@ -134,8 +131,7 @@ function procesarFoto(nombreJugador) {
     reader.onloadend = function() {
         const base64data = reader.result;
         const mimeType = file.type;
-        
-        // REEMPLAZO DE google.script.run
+
         fetch(`${API_URL}/api/jugador/foto`, {
             method: 'POST',
             headers: {
@@ -147,7 +143,7 @@ function procesarFoto(nombreJugador) {
         .then(res => {
             if(res.success) {
                 if (fotoImg) {
-                    fotoImg.src = res.url; // Asigna el base64 directamente
+                    fotoImg.src = res.url;
                     fotoImg.style.opacity = '1';
                 }
                 if (labelBtn) labelBtn.innerHTML = textoOriginal;

@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
   <head>
     <base target="_top">
+    <meta charset="UTF-8">
     <title>Liga Industrial</title>
     <link rel="icon" type="image/png" href="https://img.freepik.com/fotos-premium/pelota-beisbol-ondas-electricas_311470-153.jpg">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="google-adsense-account" content="ca-pub-8552590037010279">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8552590037010279"
-     crossorigin="anonymous"></script>
-     <link rel="stylesheet" href="ligaindustrial.css">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8552590037010279" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="ligaindustrial.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </head>
   <body>
@@ -21,56 +21,84 @@
       <button class="nav-btn" onclick="cambiarPantalla('pantalla-anotador', this)">📝 Anotar</button>
       <button class="nav-btn" onclick="cambiarPantalla('pantalla-acceso', this)">⚙️ Acceso</button>
     </div>
+
     <div class="layout-global">
+      <!-- PANEL LATERAL IZQUIERDO -->
       <div class="panel-lateral">
-         <p style="margin:0; text-align:center; font-size:10px; color:#aaa; letter-spacing:1px;">COLABORADORES</p>
-         <img src="https://i.postimg.cc/PxrdW2GC/Gemini-Generated-Image-p1k8kdp1k8kdp1k8.png" class="img-lateral">
-         <img src="https://i.postimg.cc/3RhLycvY/Whats-App-Image-2026-03-19-at-3-51-42-PM.jpg" class="img-lateral">
+        <p style="margin:0; text-align:center; font-size:10px; color:#aaa; letter-spacing:1px;">COLABORADORES</p>
+        <img src="https://i.postimg.cc/PxrdW2GC/Gemini-Generated-Image-p1k8kdp1k8kdp1k8.png" class="img-lateral">
+        <img src="https://i.postimg.cc/3RhLycvY/Whats-App-Image-2026-03-19-at-3-51-42-PM.jpg" class="img-lateral">
       </div>
+
+      <!-- CONTENEDOR PRINCIPAL -->
       <div class="contenedor">
+
+        <!-- PANTALLA INICIO / JUEGOS -->
         <div id="pantalla-inicio" class="pantalla activa">
           <h2 style="color: #1a237e; text-align: center; margin-top: 0;">Pizarra de Juegos</h2>
-          <select id="select-jornada" onchange="filtrarPorJornada()"><option>Cargando partidos...</option></select>
+          <select id="select-jornada" onchange="filtrarPorJornada()">
+            <option>Cargando partidos...</option>
+          </select>
+
           <div class="grid-categorias-inicio">
-             <div>
-                <h3 style="text-align:center; color:#1a237e; border-bottom: 2px solid #1a237e; padding-bottom:5px; margin-top:0;">Categoría A</h3>
-                <div id="contenedor-cat-a"><p style="text-align:center; color:#888;">Cargando información...</p></div>
-             </div>
-             <div>
-                <h3 style="text-align:center; color:#e65100; border-bottom: 2px solid #e65100; padding-bottom:5px; margin-top:0;">Categoría B</h3>
-                <div id="contenedor-cat-b"><p style="text-align:center; color:#888;">Cargando información...</p></div>
-             </div>
+            <div>
+              <h3 style="text-align:center; color:#1a237e; border-bottom: 2px solid #1a237e; padding-bottom:5px; margin-top:0;">Categoría A</h3>
+              <div id="contenedor-cat-a">
+                <p style="text-align:center; color:#888;">Cargando información...</p>
+              </div>
+            </div>
+            <div>
+              <h3 style="text-align:center; color:#e65100; border-bottom: 2px solid #e65100; padding-bottom:5px; margin-top:0;">Categoría B</h3>
+              <div id="contenedor-cat-b">
+                <p style="text-align:center; color:#888;">Cargando información...</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- SECCIÓN INTERCATEGORÍA (A LO ANCHO DEBAJO DE A Y B) -->
+          <div id="seccion-intercategoria" style="display:none; margin-top:20px;">
+            <h3 style="text-align:center; color:#6a1b9a; border-bottom: 2px solid #6a1b9a; padding-bottom:5px; margin-top:0;">🔥 Intercategoría (A vs B)</h3>
+            <div id="contenedor-cat-inter"></div>
           </div>
         </div>
+
+        <!-- PANTALLA POSICIONES -->
         <div id="pantalla-posiciones" class="pantalla">
           <h2 style="color: #1a237e; text-align: center; margin-top: 0;">Tabla de Posiciones</h2>
-          <div id="contenedor-tabla-posiciones"><p style="text-align:center; color:#888;">Cargando posiciones...</p></div>
+          <div id="contenedor-tabla-posiciones">
+            <p style="text-align:center; color:#888;">Cargando posiciones...</p>
+          </div>
         </div>
+
+        <!-- PANTALLA ESTADÍSTICAS -->
         <div id="pantalla-estadisticas" class="pantalla">
           <h2 style="color: #1a237e; text-align: center; margin-top: 0;">Líderes Individuales</h2>
           <p id="msj-stats" style="text-align:center; color:#888; font-size:14px;">Cargando estadísticas...</p>
           <div id="contenedor-stats" style="display:none; flex-direction:column; gap:20px;">
-             <div style="background:white; border-radius:8px; padding:10px; box-shadow:0 2px 5px rgba(0,0,0,0.05);">
-                <h3 style="text-align:center; color:#e65100; margin-top:0;">💥 Home Runs (HR)</h3>
-                <table class="tabla-posiciones" id="tabla-hrs" style="width:100%;"></table>
-             </div>
-             <div style="background:white; border-radius:8px; padding:10px; box-shadow:0 2px 5px rgba(0,0,0,0.05);">
-                <h3 style="text-align:center; color:#2e7d32; margin-top:0;">🎯 Pitchers Ganadores</h3>
-                <table class="tabla-posiciones" id="tabla-pitchers" style="width:100%;"></table>
-             </div>
+            <div style="background:white; border-radius:8px; padding:10px; box-shadow:0 2px 5px rgba(0,0,0,0.05);">
+              <h3 style="text-align:center; color:#e65100; margin-top:0;">💥 Home Runs (HR)</h3>
+              <table class="tabla-posiciones" id="tabla-hrs" style="width:100%;"></table>
+            </div>
+            <div style="background:white; border-radius:8px; padding:10px; box-shadow:0 2px 5px rgba(0,0,0,0.05);">
+              <h3 style="text-align:center; color:#2e7d32; margin-top:0;">🎯 Pitchers Ganadores</h3>
+              <table class="tabla-posiciones" id="tabla-pitchers" style="width:100%;"></table>
+            </div>
           </div>
         </div>
+
+        <!-- PANTALLA PLANTILLAS -->
         <div id="pantalla-plantillas" class="pantalla">
-  <div class="card-moderna">
-    <h2 style="margin-bottom:10px; color:#1a237e;">Plantillas Oficiales</h2>
-    <p style="font-size:13px; color:#666; margin-bottom:20px;">Selecciona un equipo para ver su lista de jugadores inscritos.</p>
-    <select id="select-equipo-plantilla" onchange="mostrarJugadoresPlantilla()" class="input-moderno" style="width:100%; max-width:300px;">
-      <option value="">Cargando equipos...</option>
-    </select>
-    <div id="lista-jugadores-plantilla" style="margin-top:25px;">
-      </div>
-  </div>
-</div>
+          <div class="card-moderna">
+            <h2 style="margin-bottom:10px; color:#1a237e;">Plantillas Oficiales</h2>
+            <p style="font-size:13px; color:#666; margin-bottom:20px;">Selecciona un equipo para ver su lista de jugadores inscritos.</p>
+            <select id="select-equipo-plantilla" onchange="mostrarJugadoresPlantilla()" class="input-moderno" style="width:100%; max-width:300px;">
+              <option value="">Cargando equipos...</option>
+            </select>
+            <div id="lista-jugadores-plantilla" style="margin-top:25px;"></div>
+          </div>
+        </div>
+
+        <!-- PANTALLA ACCESO / PANEL ADMIN Y EQUIPOS -->
         <div id="pantalla-acceso" class="pantalla">
           <div id="login-seccion" style="background:white; padding:25px; border-radius:12px; border:1px solid #eee;">
             <h2 style="margin-top:0; color:#1a237e; text-align:center;">Acceso a Equipos</h2>
@@ -79,30 +107,80 @@
             <button onclick="intentarLogin()" class="btn-accion" style="background-color:#ff6f00;">Entrar al Sistema</button>
             <p id="login-mensaje" style="text-align:center; display:none; margin-top:15px; font-weight:bold;"></p>
           </div>
+
           <div id="equipo-seccion" style="display:none; background:white; padding:20px; border-radius:12px;">
             <div style="display:flex; justify-content:space-between; margin-bottom:15px; border-bottom: 2px solid #eee; padding-bottom: 10px;">
               <h3 style="margin:0; color:#1a237e;" id="titulo-nombre-equipo">Equipo</h3>
               <button onclick="cerrarSesion()" style="padding:5px 10px; background:#d32f2f; color:white; border:none; border-radius:5px; cursor:pointer;">Salir</button>
-            </div>   
+            </div>
+
+            <!-- BARRA HERRAMIENTAS ADMIN (USUARIOS Y LOGOS) -->
+            <div id="barra-herramientas-admin" style="display:none; gap:10px; margin-bottom:20px;">
+              <button onclick="abrirModalUsuarios()" class="btn-accion" style="background-color:#4527a0; flex:1; margin:0;">🔑 Gestionar Usuarios</button>
+              <button onclick="abrirModalLogos()" class="btn-accion" style="background-color:#00838f; flex:1; margin:0;">🖼️ Logos de Equipos</button>
+            </div>
+
+            <!-- ADMIN: EDITOR DE JUEGOS -->
             <div id="panel-admin-partidos" style="display:none; background:#f4f6f9; padding:15px; border-radius:8px; border:2px dashed #1a237e; margin-bottom: 25px;">
               <h4 style="margin-top:0; color:#1a237e; text-align:center;">🗓️ Editor de Juegos</h4>
-              <select id="admin-jornada-edicion" onchange="filtrarEdicionPorJornada()"><option value="">Cargando jornadas...</option></select>
-              <select id="admin-selector-edicion" onchange="cargarDatosPartidoEdicion()"><option value="NUEVO">➕ CREAR NUEVO PARTIDO</option></select>
+              <select id="admin-jornada-edicion" onchange="filtrarEdicionPorJornada()">
+                <option value="">Cargando jornadas...</option>
+              </select>
+              <select id="admin-selector-edicion" onchange="cargarDatosPartidoEdicion()">
+                <option value="NUEVO">➕ CREAR NUEVO PARTIDO</option>
+              </select>
               <div style="display:flex; gap:10px;">
                 <input type="date" id="form-fecha" style="padding:10px; border-radius:6px; border:1px solid #ddd; width:100%; box-sizing:border-box; margin-bottom:15px;">
                 <input type="text" id="form-hora" placeholder="Hora (Ej. 10:00 AM)">
               </div>
               <div style="display:flex; gap:10px;">
-                <select id="form-cat" onchange="filtrarEquiposPorCategoria()"><option value="">Categoría...</option><option value="Categoria A">Categoría A</option><option value="Categoria B">Categoría B</option></select>
-                <select id="form-jor"><option value="">Jornada...</option><option value="Jornada 1">Jornada 1</option><option value="Jornada 2">Jornada 2</option><option value="Jornada 3">Jornada 3</option><option value="Jornada 4">Jornada 4</option><option value="Jornada 5">Jornada 5</option><option value="Jornada 6">Jornada 6</option><option value="Jornada 7">Jornada 7</option><option value="Jornada 8">Jornada 8</option><option value="Jornada 9">Jornada 9</option><option value="Jornada 10">Jornada 10</option><option value="Jornada 11">Jornada 11</option><option value="Jornada 12">Jornada 12</option><option value="Jornada 13">Jornada 13</option><option value="Jornada 14">Jornada 14</option><option value="Jornada 15">Jornada 15</option><option value="Jornada 16">Jornada 16</option><option value="Jornada 17">Jornada 17</option><option value="Playoffs">Playoffs</option><option value="Semifinal">Semifinal</option><option value="Final">Final</option></select>
+                <select id="form-cat" onchange="filtrarEquiposPorCategoria()">
+                  <option value="">Categoría...</option>
+                  <option value="Categoria A">Categoría A</option>
+                  <option value="Categoria B">Categoría B</option>
+                  <option value="Intercategoria">Intercategoría (A vs B)</option>
+                </select>
+                <select id="form-jor">
+                  <option value="">Jornada...</option>
+                  <option value="Jornada 1">Jornada 1</option>
+                  <option value="Jornada 2">Jornada 2</option>
+                  <option value="Jornada 3">Jornada 3</option>
+                  <option value="Jornada 4">Jornada 4</option>
+                  <option value="Jornada 5">Jornada 5</option>
+                  <option value="Jornada 6">Jornada 6</option>
+                  <option value="Jornada 7">Jornada 7</option>
+                  <option value="Jornada 8">Jornada 8</option>
+                  <option value="Jornada 9">Jornada 9</option>
+                  <option value="Jornada 10">Jornada 10</option>
+                  <option value="Jornada 11">Jornada 11</option>
+                  <option value="Jornada 12">Jornada 12</option>
+                  <option value="Jornada 13">Jornada 13</option>
+                  <option value="Jornada 14">Jornada 14</option>
+                  <option value="Jornada 15">Jornada 15</option>
+                  <option value="Jornada 16">Jornada 16</option>
+                  <option value="Jornada 17">Jornada 17</option>
+                  <option value="Playoffs">Playoffs</option>
+                  <option value="Semifinal">Semifinal</option>
+                  <option value="Final">Final</option>
+                </select>
               </div>
               <div style="display:flex; gap:10px; align-items: center; margin-bottom: 15px;">
-                <div style="flex:1; text-align:center;"><label style="font-size:11px; font-weight:bold; color:#666;">LOCAL</label><select id="form-loc"></select><input type="number" id="form-score-loc" placeholder="Carreras" style="text-align:center;"></div>
+                <div style="flex:1; text-align:center;">
+                  <label style="font-size:11px; font-weight:bold; color:#666;">LOCAL</label>
+                  <select id="form-loc"></select>
+                  <input type="number" id="form-score-loc" placeholder="Carreras" style="text-align:center;">
+                </div>
                 <div style="font-weight:bold; color:#aaa;">VS</div>
-                <div style="flex:1; text-align:center;"><label style="font-size:11px; font-weight:bold; color:#666;">VISITA</label><select id="form-vis"></select><input type="number" id="form-score-vis" placeholder="Carreras" style="text-align:center;"></div>
+                <div style="flex:1; text-align:center;">
+                  <label style="font-size:11px; font-weight:bold; color:#666;">VISITA</label>
+                  <select id="form-vis"></select>
+                  <input type="number" id="form-score-vis" placeholder="Carreras" style="text-align:center;">
+                </div>
               </div>
               <select id="form-campo">
-                <option value="">Selecciona Campo...</option><option value="Campo Chico">Campo Chico</option><option value="Campo Grande">Campo Grande</option>
+                <option value="">Selecciona Campo...</option>
+                <option value="Campo Chico">Campo Chico</option>
+                <option value="Campo Grande">Campo Grande</option>
               </select>
               <div style="display:flex; gap:10px;">
                 <button onclick="guardarCambiosPartido()" class="btn-accion" style="background-color:#2e7d32;" id="btn-guardar-partido">💾 Guardar</button>
@@ -112,24 +190,35 @@
                 <button id="btn-recalcular" onclick="forzarRecalculo()" class="btn-accion" style="background-color:#ff9800;">🔄 Sincronizar Puntos y Posiciones</button>
               </div>
             </div>
+
+            <!-- ADMIN: ALTA Y BAJA DE FRANQUICIAS -->
             <div id="panel-admin-equipos" style="display:none; background:#e3f2fd; padding:15px; border-radius:8px; border:2px dashed #1565c0; margin-bottom: 25px;">
               <h4 style="margin-top:0; color:#1565c0; text-align:center;">🛡️ Alta y Baja de Franquicias</h4>
               <div style="background:white; padding:10px; border-radius:6px; margin-bottom:15px;">
-                  <h5 style="margin-top:0; color:#444;">1. Crear Nuevo Equipo</h5>
-                  <select id="alta-eq-cat" style="margin-bottom:10px;"><option value="Categoria A">Categoría A</option><option value="Categoria B">Categoría B</option></select>
-                  <input type="text" id="alta-eq-nombre" placeholder="Nombre del Equipo (Obligatorio)">
-                  <textarea id="alta-eq-jugadores" rows="4" placeholder="Nombres de jugadores (uno por línea)..." style="width:100%; border:1px solid #ddd;"></textarea>
-                  <button onclick="crearEquipoBase()" class="btn-accion" style="background:#1565c0;" id="btn-crear-eq">✨ Crear Equipo con Jugadores</button>
+                <h5 style="margin-top:0; color:#444;">1. Crear Nuevo Equipo</h5>
+                <select id="alta-eq-cat" style="margin-bottom:10px;">
+                  <option value="Categoria A">Categoría A</option>
+                  <option value="Categoria B">Categoría B</option>
+                </select>
+                <input type="text" id="alta-eq-nombre" placeholder="Nombre del Equipo (Obligatorio)">
+                <textarea id="alta-eq-jugadores" rows="4" placeholder="Nombres de jugadores (uno por línea)..." style="width:100%; border:1px solid #ddd;"></textarea>
+                <button onclick="crearEquipoBase()" class="btn-accion" style="background:#1565c0;" id="btn-crear-eq">✨ Crear Equipo con Jugadores</button>
               </div>
               <div style="background:white; padding:10px; border-radius:6px;">
-                  <h5 style="margin-top:0; color:#d32f2f;">2. Eliminar Equipo</h5>
-                  <select id="baja-eq-sel"><option value="">Selecciona equipo a eliminar...</option></select>
-                  <button onclick="eliminarEquipoBase()" class="btn-accion" style="background:#d32f2f;" id="btn-eliminar-eq">🗑️ Eliminar Franquicia</button>
+                <h5 style="margin-top:0; color:#d32f2f;">2. Eliminar Equipo</h5>
+                <select id="baja-eq-sel">
+                  <option value="">Selecciona equipo a eliminar...</option>
+                </select>
+                <button onclick="eliminarEquipoBase()" class="btn-accion" style="background:#d32f2f;" id="btn-eliminar-eq">🗑️ Eliminar Franquicia</button>
               </div>
             </div>
+
+            <!-- ADMIN: TRASPASOS Y ALTA DE JUGADORES -->
             <div id="panel-admin-rosters" style="display:none; background:#e8f5e9; padding:15px; border-radius:8px; border:2px dashed #2e7d32; margin-bottom: 25px;">
               <h4 style="margin-top:0; color:#2e7d32; text-align:center;">👥 Traspasos y Alta de Jugadores</h4>
-              <select id="admin-roster-equipo" onchange="cargarRosterEdicion()"><option value="">Selecciona un equipo a editar...</option></select>
+              <select id="admin-roster-equipo" onchange="cargarRosterEdicion()">
+                <option value="">Selecciona un equipo a editar...</option>
+              </select>
               <div id="contenedor-edicion-roster" style="display:none; margin-top:15px;">
                 <div style="display:flex; gap:10px; margin-bottom:15px;">
                   <input type="text" id="input-nuevo-jugador" placeholder="Nombre completo..." style="text-transform: capitalize;">
@@ -138,64 +227,104 @@
                 <div id="lista-roster-edicion" style="background:white; padding:10px; border-radius:6px; max-height: 250px; overflow-y: auto; border: 1px solid #ccc;"></div>
               </div>
             </div>
+
+            <!-- REGISTRO DE LINEUPS -->
             <h4 style="color:#1a237e; margin-bottom:10px;">📝 Registro de Lineups</h4>
             <div id="contenedor-admin-equipo" style="display:none; margin-bottom:15px; background:#fff3e0; padding:10px; border-radius:5px;">
               <label style="font-weight:bold; font-size:12px; color:#e65100;">👑 ADMIN: ELIGE EQUIPO</label>
               <select id="admin-select-equipo" onchange="cargarJugadoresAdmin()"></select>
             </div>
-            <select id="lineup-jornada-selector" onchange="filtrarLineupsPorJornada()"><option value="">Cargando jornadas...</option></select>
-            <select id="equipo-select-partido" onchange="verificarLineupGuardado()"><option value="">Selecciona el partido...</option></select>
+            <select id="lineup-jornada-selector" onchange="filtrarLineupsPorJornada()">
+              <option value="">Cargando jornadas...</option>
+            </select>
+            <select id="equipo-select-partido" onchange="verificarLineupGuardado()">
+              <option value="">Selecciona el partido...</option>
+            </select>
             <div style="background:#f9f9f9; padding:10px; border:1px dashed #ccc; margin-bottom:15px; border-radius:6px;">
-              <div id="vista-orden-bateo"><p style="color:#aaa; text-align:center; margin:0;">Pizarra vacía</p></div>
+              <div id="vista-orden-bateo">
+                <p style="color:#aaa; text-align:center; margin:0;">Pizarra vacía</p>
+              </div>
             </div>
             <div id="contenedor-jugadores-lineup" style="display:grid; grid-template-columns: repeat(2, 1fr); gap:10px;"></div>
             <button onclick="enviarLineup()" id="btn-enviar-lineup" class="btn-accion" style="margin-top: 15px;">Enviar Lineup Oficial</button>
           </div>
         </div>
+
+        <!-- PANTALLA ANOTADOR / SCOREBOOK -->
         <div id="pantalla-anotador" class="pantalla">
           <h2 style="color: #1a237e; text-align: center; margin-top: 0;">Scorebook Digital</h2>
-          <select id="select-jornada-anotador" onchange="filtrarJuegosAnotador()"><option value="">Cargando jornadas...</option></select>
-          <select id="select-partido-anotador" onchange="cargarPartidoAnotador()"><option value="">Cargando partidos...</option></select>
+          <select id="select-jornada-anotador" onchange="filtrarJuegosAnotador()">
+            <option value="">Cargando jornadas...</option>
+          </select>
+          <select id="select-partido-anotador" onchange="cargarPartidoAnotador()">
+            <option value="">Cargando partidos...</option>
+          </select>
           <p id="msj-anotador" style="text-align:center; color:#888; font-size: 14px;"></p>
+
           <div id="area-scorebook" style="display: none;">
             <div id="marcador-live-container" style="display:flex; align-items:center; justify-content:space-between; background:#1a237e; padding:15px; border-radius:8px; color:white; margin-bottom:10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-               <div style="text-align:center; flex:1;"><div style="font-size:11px; color:#bbb;">VISITA</div><div style="font-weight:bold; font-size:14px;" id="lbl-visita">VISITA</div></div>
-               <div style="font-size:32px; font-weight:900; background:#fff; color:#1a237e; padding:5px 15px; border-radius:8px;" id="marcador-en-vivo">0 - 0</div>
-               <div style="text-align:center; flex:1;"><div style="font-size:11px; color:#bbb;">LOCAL</div><div style="font-weight:bold; font-size:14px;" id="lbl-local">LOCAL</div></div>
+              <div style="text-align:center; flex:1;">
+                <div style="font-size:11px; color:#bbb;">VISITA</div>
+                <div style="font-weight:bold; font-size:14px;" id="lbl-visita">VISITA</div>
+              </div>
+              <div style="font-size:32px; font-weight:900; background:#fff; color:#1a237e; padding:5px 15px; border-radius:8px;" id="marcador-en-vivo">0 - 0</div>
+              <div style="text-align:center; flex:1;">
+                <div style="font-size:11px; color:#bbb;">LOCAL</div>
+                <div style="font-weight:bold; font-size:14px;" id="lbl-local">LOCAL</div>
+              </div>
             </div>
+
             <button id="btn-finalizar-juego" onclick="finalizarJuegoDesdeAnotador()" class="btn-accion" style="background-color:#d32f2f; margin-bottom:15px;">🏁 Finalizar Juego y Guardar Pitcher</button>
+
             <div class="tabs-equipos">
               <div id="tab-visitante" class="tab-equipo activa" onclick="cambiarTabAnotador('visitante')">VISITANTE</div>
               <div id="tab-local" class="tab-equipo" onclick="cambiarTabAnotador('local')">LOCAL</div>
             </div>
+
             <div id="book-visitante" class="book-container">
               <table class="book-table">
-                <thead><tr><th class="col-num">#</th><th class="col-jugador">Bateador</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th></tr></thead>
+                <thead>
+                  <tr><th class="col-num">#</th><th class="col-jugador">Bateador</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th></tr>
+                </thead>
                 <tbody id="tbody-visitante"></tbody>
               </table>
             </div>
+
             <div id="book-local" class="book-container" style="display: none;">
               <table class="book-table">
-                <thead><tr><th class="col-num">#</th><th class="col-jugador">Bateador</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th></tr></thead>
+                <thead>
+                  <tr><th class="col-num">#</th><th class="col-jugador">Bateador</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th></tr>
+                </thead>
                 <tbody id="tbody-local"></tbody>
               </table>
             </div>
           </div>
         </div>
-      </div> <div class="panel-lateral">
-         <p style="margin:0; text-align:center; font-size:10px; color:#aaa; letter-spacing:1px;">COLABORADORES</p>
-         <img src="https://i.postimg.cc/PxrdW2GC/Gemini-Generated-Image-p1k8kdp1k8kdp1k8.png" class="img-lateral">
-         <img src="https://i.postimg.cc/3RhLycvY/Whats-App-Image-2026-03-19-at-3-51-42-PM.jpg" class="img-lateral">
+
       </div>
-    </div> <div id="modal-jugada" class="modal">
+
+      <!-- PANEL LATERAL DERECHO -->
+      <div class="panel-lateral">
+        <p style="margin:0; text-align:center; font-size:10px; color:#aaa; letter-spacing:1px;">COLABORADORES</p>
+        <img src="https://i.postimg.cc/PxrdW2GC/Gemini-Generated-Image-p1k8kdp1k8kdp1k8.png" class="img-lateral">
+        <img src="https://i.postimg.cc/3RhLycvY/Whats-App-Image-2026-03-19-at-3-51-42-PM.jpg" class="img-lateral">
+      </div>
+    </div>
+
+    <!-- MODAL JUGADA -->
+    <div id="modal-jugada" class="modal">
       <div class="modal-contenido">
         <h3 id="modal-titulo" style="margin-top:0; color:#1a237e; font-size: 18px;">Jugador</h3>
         <p id="modal-subtitulo" style="font-size:12px; color:#666; margin-bottom:15px;"></p>
+
         <label style="font-size: 11px; font-weight: bold; color: #888; letter-spacing: 1px;">AVANCE DE BASES</label>
         <div class="selector-bases">
-          <div class="btn-base" id="btn-1b" onclick="toggleBase(1)">1B</div><div class="btn-base" id="btn-2b" onclick="toggleBase(2)">2B</div>
-          <div class="btn-base" id="btn-3b" onclick="toggleBase(3)">3B</div><div class="btn-base" id="btn-hr" onclick="toggleBase(4)">H</div>
+          <div class="btn-base" id="btn-1b" onclick="toggleBase(1)">1B</div>
+          <div class="btn-base" id="btn-2b" onclick="toggleBase(2)">2B</div>
+          <div class="btn-base" id="btn-3b" onclick="toggleBase(3)">3B</div>
+          <div class="btn-base" id="btn-hr" onclick="toggleBase(4)">H</div>
         </div>
+
         <label style="font-size: 11px; font-weight: bold; color: #888; letter-spacing: 1px;">MARCADOR DE OUTS</label>
         <div class="selector-bases">
           <div class="btn-base btn-out" id="btn-out-0" onclick="setOut(0)">-</div>
@@ -203,12 +332,19 @@
           <div class="btn-base btn-out" id="btn-out-2" onclick="setOut(2)">2</div>
           <div class="btn-base btn-out" id="btn-out-3" onclick="setOut(3)">3</div>
         </div>
+
         <label style="font-size: 11px; font-weight: bold; color: #888; letter-spacing: 1px;">JUGADA (Ej: 6-3, K, HR)</label>
         <input type="text" id="input-jugada" class="input-anotacion" placeholder="Escribe aquí..." maxlength="5">
+
         <div class="grid-jugadas">
-          <button class="btn-rapido" onclick="escribirJugada('1B')">1B</button><button class="btn-rapido" onclick="escribirJugada('2B')">2B</button><button class="btn-rapido" onclick="escribirJugada('HR')">HR</button>
-          <button class="btn-rapido" onclick="escribirJugada('BB')">BB</button><button class="btn-rapido" style="color:red;" onclick="escribirJugada('K')">K</button><button class="btn-rapido" style="color:red;" onclick="escribirJugada('DP')">DP</button>
+          <button class="btn-rapido" onclick="escribirJugada('1B')">1B</button>
+          <button class="btn-rapido" onclick="escribirJugada('2B')">2B</button>
+          <button class="btn-rapido" onclick="escribirJugada('HR')">HR</button>
+          <button class="btn-rapido" onclick="escribirJugada('BB')">BB</button>
+          <button class="btn-rapido" style="color:red;" onclick="escribirJugada('K')">K</button>
+          <button class="btn-rapido" style="color:red;" onclick="escribirJugada('DP')">DP</button>
         </div>
+
         <div class="modal-acciones">
           <button class="btn-cancelar" style="flex:1; padding:12px; border:none; background:#eee; border-radius:6px; font-weight:bold; color:#555;" onclick="cerrarModal()">Cancelar</button>
           <button class="btn-guardar" onclick="guardarJugada()">Aplicar</button>
@@ -216,6 +352,8 @@
         <button class="btn-limpiar" style="margin-top:10px; padding:10px; background:none; border:1px dashed #ccc; color:#888; border-radius:6px; width:100%;" onclick="limpiarCelda()">🗑️ Borrar turno</button>
       </div>
     </div>
+
+    <!-- MODAL CAMBIO DE JUGADOR -->
     <div id="modal-cambio" class="modal">
       <div class="modal-contenido">
         <h3 style="margin-top:0; color:#1a237e; font-size: 18px;">🔄 Cambio de Jugador</h3>
@@ -228,7 +366,73 @@
         </div>
       </div>
     </div>
+
+    <!-- MODAL GESTIÓN DE USUARIOS (ADMIN) -->
+    <div id="modal-usuarios" class="modal">
+      <div class="modal-contenido" style="max-width:450px; width:92%; max-height:85vh; overflow-y:auto;">
+        <h3 style="margin-top:0; color:#4527a0;">🔑 Gestión de Usuarios</h3>
+        
+        <div style="background:#f5f5f5; padding:12px; border-radius:8px; margin-bottom:15px; text-align:left;">
+          <input type="hidden" id="usr-original">
+          <label style="font-size:11px; font-weight:bold; color:#555;">USUARIO</label>
+          <input type="text" id="usr-nombre" placeholder="Ej. YANKEES" oninput="this.value = this.value.toUpperCase()" style="text-transform:uppercase; margin-bottom:8px;">
+          
+          <label style="font-size:11px; font-weight:bold; color:#555;">CONTRASEÑA</label>
+          <input type="text" id="usr-pass" placeholder="Contraseña" style="margin-bottom:8px;">
+          
+          <div style="display:flex; gap:8px; margin-bottom:10px;">
+            <div style="flex:1;">
+              <label style="font-size:11px; font-weight:bold; color:#555;">ROL</label>
+              <select id="usr-rol">
+                <option value="EQUIPO">EQUIPO</option>
+                <option value="ADMIN">ADMIN</option>
+              </select>
+            </div>
+            <div style="flex:1;">
+              <label style="font-size:11px; font-weight:bold; color:#555;">EQUIPO ASIGNADO</label>
+              <select id="usr-equipo"><option value="">Ninguno / Admin</option></select>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:8px;">
+            <button onclick="guardarUsuarioAdmin()" class="btn-accion" style="background:#4527a0; flex:2; margin:0;" id="btn-guardar-usr">💾 Guardar Usuario</button>
+            <button onclick="limpiarFormUsuario()" class="btn-accion" style="background:#757575; flex:1; margin:0;">Limpiar</button>
+          </div>
+        </div>
+
+        <div id="lista-usuarios-admin" style="text-align:left; max-height:220px; overflow-y:auto; border:1px solid #ddd; border-radius:6px; padding:5px;">
+          <p style="text-align:center; color:#888;">Cargando usuarios...</p>
+        </div>
+
+        <button onclick="cerrarModalUsuarios()" style="margin-top:15px; width:100%; padding:10px; border:none; background:#eee; border-radius:6px; font-weight:bold; color:#555; cursor:pointer;">Cerrar Ventana</button>
+      </div>
+    </div>
+
+    <!-- MODAL LOGOS DE EQUIPOS (ADMIN) -->
+    <div id="modal-logos" class="modal">
+      <div class="modal-contenido" style="max-width:400px; width:92%;">
+        <h3 style="margin-top:0; color:#00838f;">🖼️ Logos de Equipos</h3>
+        
+        <select id="logo-select-equipo" onchange="previsualizarLogoEquipo()" style="margin-bottom:15px;">
+          <option value="">Selecciona un equipo...</option>
+        </select>
+
+        <div id="preview-logo-box" style="margin:10px auto 15px; width:110px; height:110px; border-radius:50%; border:2px dashed #ccc; display:flex; align-items:center; justify-content:center; overflow:hidden; background:#fafafa;">
+          <span style="font-size:12px; color:#999;">Sin logo</span>
+        </div>
+
+        <label style="display:block; font-size:11px; font-weight:bold; color:#555; margin-bottom:5px;">SUBIR IMAGEN (PNG/JPG)</label>
+        <input type="file" id="input-logo-file" accept="image/*" style="margin-bottom:15px; width:100%;">
+
+        <div class="modal-acciones">
+          <button onclick="cerrarModalLogos()" style="flex:1; padding:12px; border:none; background:#eee; border-radius:6px; font-weight:bold; color:#555; cursor:pointer;">Cancelar</button>
+          <button onclick="procesarYGuardarLogo()" id="btn-guardar-logo" class="btn-guardar" style="background-color:#00838f;">💾 Guardar Logo</button>
+        </div>
+      </div>
+    </div>
+
     <div id="toast-guardando" class="guardando-toast">💾 Guardado</div>
+
     <script src="app.js"></script>
     <script src="script.js"></script>
   </body>
